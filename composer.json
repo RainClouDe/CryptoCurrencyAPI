@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ice3x/ice3x_v2_php": "^1.0"
+    }
+}
