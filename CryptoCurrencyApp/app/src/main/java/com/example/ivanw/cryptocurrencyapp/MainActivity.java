@@ -1,14 +1,21 @@
 package com.example.ivanw.cryptocurrencyapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -50,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
             TextView litecoinLastupdated;
         //END Ethereum screen elements
 
+        //START Information buttons
+            ImageButton informationBitcoin;
+            ImageButton informationEthereum;
+            ImageButton informationLitecoin;
+        //END Information buttons
+
+        //START Setting button
+            Button settingsButton;
+        //END Setting button
+
     private FetchCryptoValues mFetchTask;
     String JSON_string;
 
@@ -78,7 +95,91 @@ public class MainActivity extends AppCompatActivity {
             litecoinExchange = (TextView) findViewById(R.id.LitecoinExchange);
             litecoinLastupdated = (TextView) findViewById(R.id.LitecoinLastUpdated);
         //END Assign the variables for litecoin.
+
+        //START Assign information buttons.
+            informationBitcoin = (ImageButton) findViewById(R.id.informationBitcoin);
+            informationEthereum = (ImageButton) findViewById(R.id.informationEthereum);
+            informationLitecoin = (ImageButton) findViewById(R.id.informationLitecoin);
+        //START Assign information buttons.
+
+        //START assign settings button
+        settingsButton = (Button) findViewById(R.id.btnsettings);
+        //END assign settings button
+
+        //START onclick for bitcoin's information button
+        informationBitcoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(1);
+            }
+        });
+        //END onclick for bitcoin's information button
+
+        //START onclick for ethereum's information button
+        informationEthereum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(2);
+            }
+        });
+        //END onclick for ethereum's information button
+
+        //START onclick for ethereum's information button
+        informationEthereum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(2);
+            }
+        });
+        //END onclick for ethereum's information button
+
+        //START onclick for ethereum's information button
+        informationLitecoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(3);
+            }
+        });
+        //END onclick for ethereum's information button
+
+        //START onclick for the settings button.
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(myIntent);
+            }
+        });
+        //END onclick for the settings button.
     }
+
+    //Method used to open the dialog
+    public void openDialog(int i)
+    {
+        Dialog dialog = new Dialog();
+
+        //Assign dialog variables
+
+
+        //Depending on the number passed, render out the correpsonding cryptocurrency information.
+        switch (i)
+        {
+            case 1:
+                dialog.setTitleBody("Bitcoin information", "Bitcoin is a new currency that was created in 2009 by an unknown person using the alias Satoshi Nakamoto. Transactions are made with no middle men – meaning, no banks! Bitcoin can be used to book hotels on Expedia, shop for furniture on Overstock and buy Xbox games. But much of the hype is about getting rich by trading it. The price of bitcoin skyrocketed into the thousands in 2017.");
+                break;
+            case 2:
+                dialog.setTitleBody("Ethereum information","In many ways, Ethereum is similar to Bitcoin. It’s a public, peer-to-peer network or blockchain with its own digital currency called Ether. Ethereum was created by Vitalik Buterin in 2014 and the purpose of Ethereum is to be a platform on which smart contracts can be built and run.\n" +
+                        "\n" +
+                        "Put very simply, Ethereum is intended to be a world computer.");
+                break;
+            case 3:
+                dialog.setTitleBody("Litecoin","Often referred to as the little brother of bitcoin, litecoin is a peer-to-peer cryptocurrency that has gained fairly widespread adoption since its inception in 2011. A form of digital money that utilizes a blockchain to easily maintain a public ledger of all transactions, litecoin is used to transfer funds directly between individuals or businesses without the need for an intermediary such as a bank or payment processing service.");
+                break;
+        }
+
+        dialog.show(getSupportFragmentManager(), "Test");
+    }
+
 
 
     @Override
@@ -90,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     class FetchCryptoValues extends AsyncTask<Void, Void, String> {
 
