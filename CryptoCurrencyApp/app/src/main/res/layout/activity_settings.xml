@@ -33,8 +33,10 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="189dp"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
         android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

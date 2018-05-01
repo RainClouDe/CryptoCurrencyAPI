@@ -35,6 +35,8 @@ else // Successful connection
 		//If the exchange is empty it means that we have to use the other API to get the data.
 		if($array['Exchange']!="ice3x") 
 		{
+
+			
 			$test = file_get_contents("https://api.cryptowat.ch/markets/".$array['Exchange']."/".$array['Value_Text']."/price");
 
 			$arraydata = json_decode($test, true);

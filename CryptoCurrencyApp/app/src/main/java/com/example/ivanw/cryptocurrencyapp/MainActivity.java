@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,21 @@ public class MainActivity extends AppCompatActivity {
             Button settingsButton;
         //END Setting button
 
+        //START Refresh button
+            Button refreshButton;
+        //END Refresh button
+
+        //START increase, decrease indicators.
+            ImageView increaseBitcoin;
+            ImageView decreaseBitcoin;
+
+            ImageView increaseEthereum;
+            ImageView decreaseEthereum;
+
+            ImageView increaseLitecoin;
+            ImageView decreaseLitecoin;
+        //END increase, decrease indicators.
+
     private FetchCryptoValues mFetchTask;
     String JSON_string;
 
@@ -103,8 +119,23 @@ public class MainActivity extends AppCompatActivity {
         //START Assign information buttons.
 
         //START assign settings button
-        settingsButton = (Button) findViewById(R.id.btnsettings);
+            settingsButton = (Button) findViewById(R.id.btnsettings);
         //END assign settings button
+
+        //START assign settings button
+            refreshButton = (Button) findViewById(R.id.btnrefresh);
+        //END assign settings button
+
+        //START assign indicator images.
+        increaseBitcoin = (ImageView) findViewById(R.id.increaseBitcoin);
+        decreaseBitcoin = (ImageView) findViewById(R.id.decreaseBitcoin);
+
+        increaseEthereum = (ImageView) findViewById(R.id.increaseEthereum);
+        decreaseEthereum = (ImageView) findViewById(R.id.decreaseEthereum);
+
+        increaseLitecoin = (ImageView) findViewById(R.id.increaseLitecoin);
+        decreaseLitecoin = (ImageView) findViewById(R.id.decreaseLitecoin);
+        //END assign indicator images.
 
         //START onclick for bitcoin's information button
         informationBitcoin.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +182,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //END onclick for the settings button.
+
+        //START onclick for the settings button.
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mFetchTask = new FetchCryptoValues();
+                mFetchTask.execute();
+            }
+        });
+        //END onclick for the settings button.
     }
 
     //Method used to open the dialog
@@ -186,6 +228,16 @@ public class MainActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
+        //Set all the indicators to be invisible as we don't whether the currency went up or down.
+        increaseBitcoin.setVisibility(View.INVISIBLE);;
+        decreaseBitcoin.setVisibility(View.INVISIBLE);
+
+        increaseEthereum.setVisibility(View.INVISIBLE);
+        decreaseEthereum.setVisibility(View.INVISIBLE);
+
+        increaseLitecoin.setVisibility(View.INVISIBLE);
+        decreaseLitecoin.setVisibility(View.INVISIBLE);
+
         mFetchTask = new FetchCryptoValues();
         mFetchTask.execute();
 
@@ -200,9 +252,11 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(Void...  voids)
         {
+
+
             try
             {
-                URL url = new URL("http://10.0.0.17/CryptoCurrencyAPI/get_pair_value.php?fiat=usd");
+                URL url = new URL("http://10.0.0.17/CryptoCurrencyAPI/get_pair_value.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
 
@@ -242,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result)
         {
             super.onPostExecute(result);
+
+
             try
             {
                 JSONObject json = new JSONObject(result);
@@ -260,6 +316,15 @@ public class MainActivity extends AppCompatActivity {
                             bitcoinExchange.setText("Exchange: " + json_data.getString("Exchange"));
                             bitcoinLastupdated.setText("Last updated: " + json_data.getString("time"));
 
+                            //Change indicators accordingly.
+                            if(json_data.getString("indicator").equals("up"))
+                            {
+                                increaseBitcoin.setVisibility(View.VISIBLE);
+                            }
+                            else if(json_data.getString("indicator").equals("down"))
+                            {
+                                decreaseBitcoin.setVisibility(View.VISIBLE);
+                            }
                             break;
 
                         case "Ethereum":
@@ -268,6 +333,15 @@ public class MainActivity extends AppCompatActivity {
                             ethereumValue.setText(json_data.getString("value") +" "+ json_data.getString("Fiat_Currency_Name"));
                             ethereumExchange.setText("Exchange: " + json_data.getString("Exchange"));
                             ethereumLastupdated.setText("Last updated: " + json_data.getString("time"));
+
+                            if(json_data.getString("indicator").equals("up"))
+                            {
+                                increaseEthereum.setVisibility(View.VISIBLE);
+                            }
+                            else if(json_data.getString("indicator").equals("down"))
+                            {
+                                decreaseEthereum.setVisibility(View.VISIBLE);
+                            }
 
                             break;
 
@@ -278,7 +352,14 @@ public class MainActivity extends AppCompatActivity {
                             litecoinExchange.setText("Exchange: " + json_data.getString("Exchange"));
                             litecoinLastupdated.setText("Last updated: " + json_data.getString("time"));
 
-
+                            if(json_data.getString("indicator").equals("up"))
+                            {
+                                increaseLitecoin.setVisibility(View.VISIBLE);
+                            }
+                            else if(json_data.getString("indicator").equals("down"))
+                            {
+                                decreaseLitecoin.setVisibility(View.VISIBLE);
+                            }
                             break;
                     }
 
